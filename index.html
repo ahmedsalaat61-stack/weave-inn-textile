@@ -25,31 +25,76 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .contact{padding:60px 0;background:#fafafa}.contact-card{background:#fff;border:1px solid var(--l);padding:28px}.contact-link{font-weight:800;color:var(--g);word-break:break-word}.footer{background:#101613;color:#cbd1cd;padding:35px 0 90px}.bottom{display:none}
 @media(max-width:850px){.products{grid-template-columns:repeat(2,1fr)}.about-grid,.custom-grid,.contact-box,.collection-grid{grid-template-columns:1fr}.hero{height:550px}.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;z-index:10;justify-content:space-around;padding:8px}.bottom a{text-align:center;font-size:12px;font-weight:700}.bottom b{display:block;font-size:21px}}
 @media(max-width:500px){.products{gap:12px}.section{padding:38px 0}.section h2{font-size:31px}.product h3{font-size:15px}.hero p{font-size:16px}}
+
+.menu{cursor:pointer}.menu-panel{position:fixed;top:0;left:-320px;width:min(320px,85vw);height:100vh;background:#fff;color:#111;z-index:30;padding:90px 25px;box-shadow:5px 0 25px #0003;transition:left .25s}.menu-panel.open{left:0}.menu-panel a{display:block;padding:16px 5px;border-bottom:1px solid #eee;font-weight:800}.menu-close,.cart-close{border:0;background:none;font-size:30px;cursor:pointer}.menu-close{position:absolute;right:20px;top:20px}.menu-backdrop,.cart-backdrop{display:none;position:fixed;inset:0;background:#0008}.menu-backdrop.open,.cart-backdrop.open{display:block}.menu-backdrop{z-index:29}.cart-backdrop{z-index:39}.cart-icon{cursor:pointer;position:relative}.cart-count{position:absolute;top:-10px;right:-12px;background:#dc4d4d;color:#fff;border-radius:50%;min-width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:11px}.cart-drawer{position:fixed;top:0;right:-430px;width:min(430px,94vw);height:100vh;background:#fff;color:#111;z-index:40;box-shadow:-5px 0 25px #0003;transition:right .25s;display:flex;flex-direction:column}.cart-drawer.open{right:0}.cart-head{display:flex;justify-content:space-between;align-items:center;padding:22px;border-bottom:1px solid #ddd}.cart-head h2{margin:0}.cart-items{padding:18px;overflow:auto;flex:1}.cart-empty{text-align:center;color:#777;padding:50px 10px}.cart-item{display:grid;grid-template-columns:70px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid #eee}.cart-item img{width:70px;height:70px;object-fit:cover}.cart-item h4{margin:0 0 5px}.qty{display:flex;align-items:center;gap:7px;margin-top:8px}.qty button{width:28px;height:28px;border:1px solid #ccc;background:#f5f5f5;border-radius:5px}.remove{border:0;background:none;color:#c33;cursor:pointer}.cart-foot{padding:18px;border-top:1px solid #ddd}.cart-total{display:flex;justify-content:space-between;font-weight:900;margin-bottom:12px}.order-btn,.add-cart{border:0;cursor:pointer;font-weight:900}.order-btn{width:100%;background:#16b957;color:#fff;padding:15px;border-radius:30px}.add-cart{background:#18352e;color:#fff;padding:10px 14px;margin-top:10px;border-radius:6px}
 </style></head><body>
 <div class="top">WELCOME TO <span>WEAVE INN TEXTILE</span> • FACTORY DIRECT & BULK ORDERS</div>
 <div class="notice">BEDSHEETS • TEXTILE FABRICS • TOWELS • CUSTOM PRINTING • PAKISTAN & INTERNATIONAL DELIVERY</div>
-<header class="header"><div class="menu">☰</div><div class="logo-wrap"><img class="logo" src="logo.jpg" alt="Weave Inn Textile"><div class="brand">WEAVE INN TEXTILE</div></div><div class="icons">⌕ ♡ 🛒</div></header>
+<header class="header"><div class="menu" id="menuBtn">☰</div><div class="logo-wrap"><img class="logo" src="logo.jpg" alt="Weave Inn Textile"><div class="brand">WEAVE INN TEXTILE</div></div><div class="icons">⌕ ♡ <span class="cart-icon" id="cartBtn">🛒<span class="cart-count" id="cartCount">0</span></span></div></header>
 <section class="hero"><div class="hero-inner"><div class="ey">Textile Manufacturer & Supplier</div><h1>Quality fabric, made for your collection.</h1><p>Bedsheets, printed fabrics, towels and custom textile production — supplied directly by Weave Inn Textile for retail, wholesale and international buyers.</p><a class="btn" href="#shop">SHOP COLLECTION</a></div></section>
 <div class="marquee">FACTORY DIRECT PRICE | CUSTOM PRINTING | BULK ORDERS | INTERNATIONAL DELIVERY</div>
 <section class="section" id="shop"><div class="container"><h2>Featured Collection</h2><div class="products">
-<article class="product"><div class="pic"><span class="sale">NEW</span><img src="floral-fabric.jpg"></div><h3>Rose Grid Floral Print</h3><div class="price">Price on Request</div><div class="pay">Wholesale & bulk orders</div></article>
-<article class="product"><div class="pic"><span class="sale">NEW</span><img src="grey-floral-fabric.jpg"></div><h3>Grey Purple Floral Print</h3><div class="price">Price on Request</div><div class="pay">Wholesale & bulk orders</div></article>
-<article class="product"><div class="pic"><span class="sale">PRINT</span><img src="printed-textile.jpg"></div><h3>Grey Heritage Print</h3><div class="price">Price on Request</div><div class="pay">Custom production available</div></article>
-<article class="product"><div class="pic"><span class="sale">PRINT</span><img src="camouflage-fabric.jpg"></div><h3>Camouflage Print Fabric</h3><div class="price">Price on Request</div><div class="pay">Custom & bulk orders</div></article>
+<article class="product"><div class="pic"><span class="sale">NEW</span><img src="floral-fabric.jpg"></div><h3>Rose Grid Floral Print</h3><div class="price">Price on Request</div><div class="pay">Wholesale & bulk orders</div><button class="add-cart" onclick="addToCart(0)">🛒 Add to Cart</button></article>
+<article class="product"><div class="pic"><span class="sale">NEW</span><img src="grey-floral-fabric.jpg"></div><h3>Grey Purple Floral Print</h3><div class="price">Price on Request</div><div class="pay">Wholesale & bulk orders</div><button class="add-cart" onclick="addToCart(1)">🛒 Add to Cart</button></article>
+<article class="product"><div class="pic"><span class="sale">PRINT</span><img src="printed-textile.jpg"></div><h3>Grey Heritage Print</h3><div class="price">Price on Request</div><div class="pay">Custom production available</div><button class="add-cart" onclick="addToCart(2)">🛒 Add to Cart</button></article>
+<article class="product"><div class="pic"><span class="sale">PRINT</span><img src="camouflage-fabric.jpg"></div><h3>Camouflage Print Fabric</h3><div class="price">Price on Request</div><div class="pay">Custom & bulk orders</div><button class="add-cart" onclick="addToCart(3)">🛒 Add to Cart</button></article>
 </div></div></section>
 <section class="section collection"><div class="container"><h2>Shop by Collection</h2><div class="collection-grid">
 <div class="collection-card"><img src="pink-bedsheet-room.jpg"><div><div class="ey">Home Textiles</div><h3>Printed Bedsheets</h3></div></div>
 <div class="collection-card"><img src="grey-bedsheet-room.jpg"><div><div class="ey">Home Textiles</div><h3>Heritage Prints</h3></div></div>
 </div></div></section>
-<section class="custom"><div class="container custom-grid">
+<section class="custom" id="custom"><div class="container custom-grid">
 <div class="card"><div class="ey">Custom Printing</div><h2>Your design, your fabric.</h2><p>Send your artwork, pattern or reference and tell us the product, quantity and required size. We can discuss custom textile production.</p><a class="wa" href="https://wa.me/923241454748">💬 Discuss Custom Printing</a></div>
 <div class="card"><div class="ey">Delivery & Payment</div><h2>Pakistan & International</h2><p>Delivery is available in Pakistan and internationally. Prices are provided on request.</p><p><strong>Payment:</strong> Bank transfer and available international transfer arrangements.</p></div>
 </div></section>
 <section class="about"><div class="container about-grid"><div><div class="ey">WEAVE INN TEXTILE</div><h2>From factory floor to your customer.</h2><p>Weave Inn Textile manufactures and supplies textile products for retail, wholesale and custom orders.</p></div><div class="facts"><div class="fact"><strong>01</strong><small>Bedsheets</small></div><div class="fact"><strong>02</strong><small>Textile Fabrics</small></div><div class="fact"><strong>03</strong><small>Towels</small></div><div class="fact"><strong>04</strong><small>Custom Printing</small></div></div></div></section>
-<section class="contact"><div class="container"><h2>Contact Weave Inn Textile</h2><div class="contact-box">
+<section class="contact" id="contact"><div class="container"><h2>Contact Weave Inn Textile</h2><div class="contact-box">
 <div class="contact-card"><h3>WhatsApp / Phone</h3><a class="contact-link" href="tel:+923241454748">+92 324 1454748</a><br><a class="wa" href="https://wa.me/923241454748">💬 WhatsApp Us</a></div>
 <div class="contact-card"><h3>Email</h3><a class="contact-link" href="mailto:ahmedimran@weaveinntextile.com">ahmedimran@weaveinntextile.com</a><p>For quotations, wholesale enquiries and international orders.</p></div>
 </div></div></section>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<nav class="menu-panel" id="menuPanel">
+<button class="menu-close" id="menuClose">×</button>
+<h2>Weave Inn Textile</h2>
+<a href="#" data-menu>⌂ Home</a><a href="#shop" data-menu>🛍 Shop Collection</a>
+<a href="#custom" data-menu>✦ Custom Printing</a><a href="#contact" data-menu>☎ Contact Us</a>
+<a href="#" id="menuCart">🛒 Cart (<span id="menuCartCount">0</span>)</a>
+</nav>
+<div class="cart-backdrop" id="cartBackdrop"></div>
+<aside class="cart-drawer" id="cartDrawer">
+<div class="cart-head"><h2>Your Cart</h2><button class="cart-close" id="cartClose">×</button></div>
+<div class="cart-items" id="cartItems"><div class="cart-empty">Your cart is empty.</div></div>
+<div class="cart-foot"><div class="cart-total"><span>Items</span><span id="cartTotalItems">0</span></div>
+<button class="order-btn" id="whatsappOrder">💬 Order on WhatsApp</button></div>
+</aside>
 <footer class="footer"><div class="container"><strong>Weave Inn Textile</strong><br>Textile Manufacturer • Bedsheets • Fabrics • Towels • Custom Printing<br><br>Pakistan & International Delivery • Prices on Request</div></footer>
 <div class="bottom"><a href="#"><b>⌂</b>Home</a><a href="#shop"><b>🛍</b>Shop</a><a href="#custom"><b>ⓘ</b>Custom</a><a href="#contact"><b>☎</b>Contact</a></div>
+
+<script>
+const products=[
+{name:"Rose Grid Floral Print",image:"floral-fabric.jpg"},
+{name:"Grey Purple Floral Print",image:"grey-floral-fabric.jpg"},
+{name:"Grey Heritage Print",image:"printed-textile.jpg"},
+{name:"Camouflage Print Fabric",image:"camouflage-fabric.jpg"}];
+let cart=JSON.parse(localStorage.getItem("weaveInnCart")||"[]");
+const $=id=>document.getElementById(id);
+function openMenu(){$("menuPanel").classList.add("open");$("menuBackdrop").classList.add("open")}
+function closeMenu(){$("menuPanel").classList.remove("open");$("menuBackdrop").classList.remove("open")}
+function openCart(){$("cartDrawer").classList.add("open");$("cartBackdrop").classList.add("open");renderCart()}
+function closeCart(){$("cartDrawer").classList.remove("open");$("cartBackdrop").classList.remove("open")}
+$("menuBtn").onclick=openMenu;$("menuClose").onclick=closeMenu;$("menuBackdrop").onclick=closeMenu;
+$("cartBtn").onclick=openCart;$("cartClose").onclick=closeCart;$("cartBackdrop").onclick=closeCart;
+document.querySelectorAll("[data-menu]").forEach(a=>a.onclick=closeMenu);
+$("menuCart").onclick=e=>{e.preventDefault();closeMenu();openCart()};
+function save(){localStorage.setItem("weaveInnCart",JSON.stringify(cart))}
+function addToCart(id){let x=cart.find(i=>i.id===id);if(x)x.qty++;else cart.push({id,qty:1});save();renderCart();openCart()}
+function changeQty(id,n){let x=cart.find(i=>i.id===id);if(!x)return;x.qty+=n;if(x.qty<1)cart=cart.filter(i=>i.id!==id);save();renderCart()}
+function removeItem(id){cart=cart.filter(i=>i.id!==id);save();renderCart()}
+function renderCart(){let count=cart.reduce((s,x)=>s+x.qty,0);$("cartCount").textContent=count;$("cartCount").style.display=count?"inline-flex":"none";$("menuCartCount").textContent=count;$("cartTotalItems").textContent=count;
+if(!cart.length){$("cartItems").innerHTML='<div class="cart-empty">Your cart is empty.<br><br>Add products from the collection.</div>';return}
+$("cartItems").innerHTML=cart.map(x=>{let p=products[x.id];return `<div class="cart-item"><img src="${p.image}" alt="${p.name}"><div><h4>${p.name}</h4><small>Price on Request</small><div class="qty"><button onclick="changeQty(${x.id},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${x.id},1)">+</button><button class="remove" onclick="removeItem(${x.id})">Remove</button></div></div></div>`}).join("")}
+$("whatsappOrder").onclick=()=>{if(!cart.length){alert("Your cart is empty.");return}let list=cart.map(x=>`• ${products[x.id].name} × ${x.qty}`).join("\n");let msg=encodeURIComponent("Hello Weave Inn Textile, I would like a quotation for:\n\n"+list+"\n\nPlease send me the price and availability.");window.open("https://wa.me/923241454748?text="+msg,"_blank")};
+renderCart();
+</script>
 </body></html>
