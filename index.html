@@ -47,6 +47,29 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .add-cart{margin-top:10px;background:#18352e;color:#fff;border:0;padding:10px 14px;border-radius:6px;font-weight:800;cursor:pointer}
 .cart-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;padding:12px 0}
 .cart-total{font-size:18px;font-weight:900;margin-top:18px}.buy-btn{display:block;width:100%;margin-top:14px;background:#18352e;color:#fff;border:0;padding:13px 16px;border-radius:7px;font-weight:900;font-size:16px;cursor:pointer}.qty{font-weight:900;margin-left:auto;margin-right:8px}.cart-row button{border:1px solid #ccc;background:#fff;border-radius:5px;padding:5px 8px;cursor:pointer}
+
+/* Final fixes: favorites, hamburger, image cart, chat widget */
+.header{z-index:1000}
+.menu.icon-btn{position:relative;z-index:1002;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;color:#fff;background:#18352eaa;border-radius:8px}
+.icons{position:relative;z-index:1002;display:flex;align-items:center;gap:8px}
+.icons .icon-btn{color:#fff;background:#18352eaa;border-radius:8px}
+.fav-btn{font-size:0}
+.fav-btn:after{content:'♡';font-size:27px}
+.fav-btn.active:after{content:'♥';color:#dc4d4d}
+.cart-row{align-items:center}
+.cart-images{display:flex;gap:5px;flex-shrink:0}
+.cart-images img{width:52px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #ddd}
+.cart-info{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.cart-name{font-weight:800}
+.chat-float{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;background:#16b957;color:#fff;display:flex;align-items:center;justify-content:center;font-size:29px;z-index:2000;box-shadow:0 4px 16px #0004;cursor:pointer;border:0}
+.chat-box{position:fixed;right:22px;bottom:92px;width:min(360px,calc(100vw - 30px));background:#fff;border-radius:14px;box-shadow:0 8px 30px #0003;z-index:2001;display:none;overflow:hidden;border:1px solid #ddd}
+.chat-box.open{display:block}
+.chat-head{background:#fff;padding:18px 20px;border-bottom:1px solid #eee;font-weight:900}
+.chat-body{padding:25px 22px;color:#333}
+.chat-body p{line-height:1.5}
+.chat-start{display:block;text-align:center;background:#16b957;color:#fff;padding:14px;border-radius:8px;font-weight:900;text-decoration:none}
+.chat-close{float:right;border:0;background:none;font-size:24px;cursor:pointer}
+@media(max-width:500px){.cart-images img{width:42px;height:42px}.chat-float{right:14px;bottom:74px}}
 </style></head><body>
 <div class="top">WELCOME TO <span>WEAVE INN TEXTILE</span> • FACTORY DIRECT & BULK ORDERS</div>
 <div class="notice">BEDSHEETS • TEXTILE FABRICS • TOWELS • CUSTOM PRINTING • PAKISTAN & INTERNATIONAL DELIVERY</div>
@@ -92,6 +115,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
   <a class="fabric-menu-link" href="pocket-lining.html" target="_blank" rel="noopener">Pocket Lining ↗</a>
   <a class="fabric-menu-link" href="premium-rotary-digital-dyed.html" target="_blank" rel="noopener">Premium Rotary Print, Digital Print &amp; Dyed Fabric ↗</a>
   <a class="menu-link" href="#cart" id="menuCart">🛒 Cart</a>
+  <a class="menu-link" href="#" id="menuFavorites">♡ Favorites</a>
   <a class="menu-link" href="#contact">☎ Contact Us</a>
 </nav>
 <section id="cart" class="section" style="padding:25px 0">
@@ -102,6 +126,12 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 <aside class="drawer" id="loveDrawer"><button class="close-btn" data-close>×</button><h2>Favorites</h2><div id="favoritesList"><p>No favorites yet.</p></div></aside>
 <aside class="drawer" id="cartDrawer"><button class="close-btn" data-close>×</button><h2>Your Cart</h2><div id="cartItems"><p>Your cart is empty.</p></div><div class="cart-total" id="cartTotal"></div><button class="buy-btn" id="buyCart">Buy</button></aside>
 
+
+<button class="chat-float" id="chatFloat" aria-label="Chat with Weave Inn Textile">💬</button>
+<div class="chat-box" id="chatBox">
+  <div class="chat-head"><button class="chat-close" id="chatClose">×</button>WEAVE INN TEXTILE<br><small>Typically replies within an hour</small></div>
+  <div class="chat-body"><p>Hi there,<br>How can I help you?</p><a class="chat-start" href="https://wa.me/923241454748" target="_blank" rel="noopener">Start Chat with Weave Inn Textile on WhatsApp</a></div>
+</div>
 <footer class="footer"><div class="container"><strong>Weave Inn Textile</strong><br>Textile Manufacturer • Bedsheets • Fabrics • Towels • Custom Printing<br><br>Pakistan & International Delivery • Prices on Request</div></footer>
 <div class="bottom"><a href="#"><b>⌂</b>Home</a><a href="#shop"><b>🛍</b>Shop</a><a href="#custom"><b>ⓘ</b>Custom</a><a href="#contact"><b>☎</b>Contact</a></div>
 <script>
@@ -132,13 +162,22 @@ document.querySelectorAll(".fav-btn").forEach(b=>b.addEventListener("click",e=>{
 
 function getCartGroups(){
   const groups={};
-  cart.forEach(name=>{groups[name]=(groups[name]||0)+1;});
+  cart.forEach(item=>{const name=typeof item==="string"?item:item.name;groups[name]=(groups[name]||0)+1;});
   return Object.entries(groups);
+}
+function productData(name){
+  const map={
+    "Rose Grid Floral Print":["rose-grid-bedroom.jpg","rose-grid-living.jpg","rose-grid-curtains.jpg"],
+    "Grey Purple Floral Print":["grey-purple-bedroom.jpg","grey-purple-living.jpg","grey-purple-curtains.jpg"],
+    "Grey Heritage Print":["grey-heritage-bedroom.jpg","grey-heritage-living.jpg","grey-heritage-curtains.jpg"]
+  };
+  return map[name]||[];
 }
 function cartRows(){
   return getCartGroups().map(([name,qty])=>{
     const safe=name.replace(/'/g,"\\'");
-    return '<div class="cart-row"><span>'+name+'</span><span class="qty">×'+qty+'</span><button onclick="removeOne(\''+safe+'\')">Remove</button></div>';
+    const imgs=productData(name).map(src=>'<img src="'+src+'" alt="'+name+'">').join('');
+    return '<div class="cart-row"><div class="cart-info"><div class="cart-images">'+imgs+'</div><span class="cart-name">'+name+'</span></div><span class="qty">×'+qty+'</span><button onclick="removeOne(\''+safe+'\')">Remove</button></div>';
   }).join("");
 }
 function renderCart(){
@@ -149,7 +188,7 @@ function renderCart(){
   box.innerHTML=rows; page.innerHTML=rows; total.textContent="Items: "+cart.length;
 }
 function removeOne(name){
-  const i=cart.indexOf(name);
+  const i=cart.findIndex(item=>(typeof item==="string"?item:item.name)===name);
   if(i>-1) cart.splice(i,1);
   saveCart();
 }
@@ -170,6 +209,10 @@ function renderSearch(q=""){
 }
 input.addEventListener("input",()=>renderSearch(input.value)); renderSearch();
 
+document.getElementById("menuFavorites").addEventListener("click",e=>{e.preventDefault();openDrawer("love");});
+const chatFloat=document.getElementById("chatFloat"), chatBox=document.getElementById("chatBox"), chatClose=document.getElementById("chatClose");
+chatFloat.addEventListener("click",()=>chatBox.classList.toggle("open"));
+chatClose.addEventListener("click",()=>chatBox.classList.remove("open"));
 renderFavorites();
 renderCart();
 </script></body></html>

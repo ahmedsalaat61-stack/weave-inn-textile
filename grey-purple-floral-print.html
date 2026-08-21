@@ -56,6 +56,8 @@ button,.buy{border:0;border-radius:7px;padding:14px 24px;font-weight:900;font-si
 const PRODUCT="Grey Purple Floral Print";
 const WA="923241454748";
 let cart=JSON.parse(localStorage.getItem("weaveInnCart")||"[]");
+// Keep older carts compatible while storing the product's 3 pictures.
+cart=cart.map(x=>typeof x==="string"?x:x);
 function showToast(text){
   const t=document.getElementById("toast");
   t.textContent=text;
@@ -63,7 +65,7 @@ function showToast(text){
   setTimeout(()=>t.style.display="none",1800);
 }
 document.getElementById("add").addEventListener("click",()=>{
-  cart.push(PRODUCT);
+  cart.push({name:PRODUCT,images:["grey-purple-bedroom.jpg","grey-purple-living.jpg","grey-purple-curtains.jpg"]});
   localStorage.setItem("weaveInnCart",JSON.stringify(cart));
   showToast(PRODUCT+" added to cart");
 });
