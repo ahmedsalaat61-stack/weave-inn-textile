@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Weave Inn Textile | Textile Manufacturer & Supplier</title>
 <meta name="description" content="Weave Inn Textile — bedsheets, textile fabrics, towels and custom printing.">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light"><meta name="weave-inn-version" content="2026-08-21-cart-favorites-fix-v3">
 <style>
 html,body{background:#fff!important;color:#111!important;color-scheme:light!important}
 @media (prefers-color-scheme:dark){
@@ -36,9 +36,9 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .fabric-menu-logo img{background:transparent!important}
 .fabric-menu-brand{font-size:20px;font-weight:900;letter-spacing:1.5px;margin-top:8px}
 .fabric-menu-link{cursor:pointer}
-.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:60}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:2500}
 .overlay.open{display:block}
-.drawer{position:fixed;right:-430px;top:0;width:min(430px,92vw);height:100vh;background:#fff;color:#111;z-index:61;padding:28px;box-shadow:-5px 0 25px #0003;transition:right .25s;overflow:auto}
+.drawer{position:fixed;right:-430px;top:0;width:min(430px,92vw);height:100vh;background:#fff;color:#111;z-index:2600;padding:28px;box-shadow:-5px 0 25px #0003;transition:right .25s;overflow:auto}
 .drawer.open{right:0}
 .drawer h2{margin-top:0}
 .close-btn{float:right;border:0;background:none;font-size:28px;cursor:pointer}
@@ -55,7 +55,8 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .icons .icon-btn{color:#fff;background:#18352eaa;border-radius:8px}
 /* Product cards use ONLY a heart in the top-right corner. The hamburger stays in the main header. */
 .product .fav-btn{font-size:0!important;display:flex;align-items:center;justify-content:center}
-.product .fav-btn:after{content:'♡';font-size:28px;line-height:1}
+.product .fav-btn{font-family:Arial,sans-serif!important;overflow:hidden!important;text-indent:-9999px!important}
+.product .fav-btn:after{content:'♡';font-size:30px;line-height:1;text-indent:0;display:block}
 .product .fav-btn.active:after{content:'♥';color:#dc4d4d}
 .cart-row{display:flex;flex-direction:column;align-items:stretch;gap:10px;border-bottom:1px solid #eee;padding:16px 0}
 .cart-images{display:flex;gap:6px;flex-shrink:0}
@@ -238,6 +239,8 @@ document.getElementById("menuFavorites").addEventListener("click",e=>{e.preventD
 const chatFloat=document.getElementById("chatFloat"), chatBox=document.getElementById("chatBox"), chatClose=document.getElementById("chatClose");
 chatFloat.addEventListener("click",()=>chatBox.classList.toggle("open"));
 chatClose.addEventListener("click",()=>chatBox.classList.remove("open"));
+// Final UI normalization: product cards always use a heart, never the menu/hamburger icon.
+document.querySelectorAll('.product .fav-btn').forEach(b=>{b.textContent=''; b.setAttribute('aria-label','Favorite');});
 renderFavorites();
 renderCart();
 </script></body></html>
