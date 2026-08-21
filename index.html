@@ -48,19 +48,28 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .cart-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;padding:12px 0}
 .cart-total{font-size:18px;font-weight:900;margin-top:18px}.buy-btn{display:block;width:100%;margin-top:14px;background:#18352e;color:#fff;border:0;padding:13px 16px;border-radius:7px;font-weight:900;font-size:16px;cursor:pointer}.qty{font-weight:900;margin-left:auto;margin-right:8px}.cart-row button{border:1px solid #ccc;background:#fff;border-radius:5px;padding:5px 8px;cursor:pointer}
 
-/* Final fixes: favorites, hamburger, image cart, chat widget */
+/* Final fixes: clean favorites, clean cart, product-heart buttons, chat */
 .header{z-index:1000}
 .menu.icon-btn{position:relative;z-index:1002;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;color:#fff;background:#18352eaa;border-radius:8px}
 .icons{position:relative;z-index:1002;display:flex;align-items:center;gap:8px}
 .icons .icon-btn{color:#fff;background:#18352eaa;border-radius:8px}
-.fav-btn{font-size:0}
-.fav-btn:after{content:'♡';font-size:27px}
-.fav-btn.active:after{content:'♥';color:#dc4d4d}
-.cart-row{align-items:center}
-.cart-images{display:flex;gap:5px;flex-shrink:0}
-.cart-images img{width:52px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #ddd}
-.cart-info{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-.cart-name{font-weight:800}
+/* Product cards use ONLY a heart in the top-right corner. The hamburger stays in the main header. */
+.product .fav-btn{font-size:0!important;display:flex;align-items:center;justify-content:center}
+.product .fav-btn:after{content:'♡';font-size:28px;line-height:1}
+.product .fav-btn.active:after{content:'♥';color:#dc4d4d}
+.cart-row{display:flex;flex-direction:column;align-items:stretch;gap:10px;border-bottom:1px solid #eee;padding:16px 0}
+.cart-images{display:flex;gap:6px;flex-shrink:0}
+.cart-images img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid #ddd}
+.cart-info{display:flex;flex-direction:column;align-items:flex-start;gap:8px;width:100%;min-width:0}
+.cart-name{font-weight:800;font-size:16px}
+.cart-controls{display:flex;align-items:center;gap:10px;width:100%}
+.qty{font-weight:900;margin:0 auto 0 0}
+.cart-remove{border:1px solid #ccc;background:#fff;border-radius:5px;padding:7px 11px;cursor:pointer}
+.favorite-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #eee}
+.favorite-thumb{width:58px;height:58px;object-fit:cover;border-radius:6px;border:1px solid #ddd;flex:0 0 auto}
+.favorite-content{flex:1;min-width:0}
+.favorite-content a{font-weight:800;display:block}
+.favorite-remove{border:1px solid #ccc;background:#fff;border-radius:5px;padding:7px 10px;cursor:pointer}
 .chat-float{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;background:#16b957;color:#fff;display:flex;align-items:center;justify-content:center;font-size:29px;z-index:2000;box-shadow:0 4px 16px #0004;cursor:pointer;border:0}
 .chat-box{position:fixed;right:22px;bottom:92px;width:min(360px,calc(100vw - 30px));background:#fff;border-radius:14px;box-shadow:0 8px 30px #0003;z-index:2001;display:none;overflow:hidden;border:1px solid #ddd}
 .chat-box.open{display:block}
@@ -69,7 +78,7 @@ body{margin:0;font-family:Arial,sans-serif;color:#111}a{text-decoration:none;col
 .chat-body p{line-height:1.5}
 .chat-start{display:block;text-align:center;background:#16b957;color:#fff;padding:14px;border-radius:8px;font-weight:900;text-decoration:none}
 .chat-close{float:right;border:0;background:none;font-size:24px;cursor:pointer}
-@media(max-width:500px){.cart-images img{width:42px;height:42px}.chat-float{right:14px;bottom:74px}}
+@media(max-width:500px){.cart-images img{width:62px;height:62px}.favorite-thumb{width:52px;height:52px}.chat-float{right:14px;bottom:74px}}
 </style></head><body>
 <div class="top">WELCOME TO <span>WEAVE INN TEXTILE</span> • FACTORY DIRECT & BULK ORDERS</div>
 <div class="notice">BEDSHEETS • TEXTILE FABRICS • TOWELS • CUSTOM PRINTING • PAKISTAN & INTERNATIONAL DELIVERY</div>
@@ -155,7 +164,23 @@ document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",
 const favorites=JSON.parse(localStorage.getItem("weaveInnFavorites")||"[]");
 function saveFavorites(){localStorage.setItem("weaveInnFavorites",JSON.stringify(favorites));renderFavorites();}
 function toggleFavorite(name){const i=favorites.indexOf(name);if(i>=0)favorites.splice(i,1);else favorites.push(name);saveFavorites();}
-function renderFavorites(){const box=document.getElementById("favoritesList");if(!favorites.length){box.innerHTML="<p>No favorites yet.</p>";return;}box.innerHTML=favorites.map(n=>{const map={"Rose Grid Floral Print":"rose-grid-floral-print.html","Grey Purple Floral Print":"grey-purple-floral-print.html","Grey Heritage Print":"grey-heritage-print.html"};return '<div class="search-result"><a href="'+map[n]+'" target="_blank" rel="noopener">♡ '+n+'</a></div>';}).join("");document.querySelectorAll(".fav-btn").forEach(b=>b.classList.toggle("active",favorites.includes(b.dataset.fav)));}
+function renderFavorites(){
+  const box=document.getElementById("favoritesList");
+  if(!favorites.length){box.innerHTML="<p>No favorites yet.</p>";document.querySelectorAll(".fav-btn").forEach(b=>b.classList.remove("active"));return;}
+  const map={
+    "Rose Grid Floral Print":{page:"rose-grid-floral-print.html",img:"rose-grid-bedroom.jpg"},
+    "Grey Purple Floral Print":{page:"grey-purple-floral-print.html",img:"grey-purple-bedroom.jpg"},
+    "Grey Heritage Print":{page:"grey-heritage-print.html",img:"grey-heritage-bedroom.jpg"}
+  };
+  box.innerHTML=favorites.map(n=>{
+    const d=map[n];
+    if(!d)return "";
+    const safe=n.replace(/'/g,"\\'");
+    return '<div class="favorite-row"><img class="favorite-thumb" src="'+d.img+'" alt="'+n+'"><div class="favorite-content"><a href="'+d.page+'" target="_blank" rel="noopener">'+n+'</a></div><button class="favorite-remove" onclick="removeFavorite(\''+safe+'\')">Remove</button></div>';
+  }).join("");
+  document.querySelectorAll(".fav-btn").forEach(b=>b.classList.toggle("active",favorites.includes(b.dataset.fav)));
+}
+function removeFavorite(name){const i=favorites.indexOf(name);if(i>-1)favorites.splice(i,1);saveFavorites();}
 function addToCart(name){cart.push(name);saveCart();openDrawer("cart");}
 document.querySelectorAll(".add-cart").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.name)));
 document.querySelectorAll(".fav-btn").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();toggleFavorite(b.dataset.fav);}));
@@ -177,7 +202,7 @@ function cartRows(){
   return getCartGroups().map(([name,qty])=>{
     const safe=name.replace(/'/g,"\\'");
     const imgs=productData(name).map(src=>'<img src="'+src+'" alt="'+name+'">').join('');
-    return '<div class="cart-row"><div class="cart-info"><div class="cart-images">'+imgs+'</div><span class="cart-name">'+name+'</span></div><span class="qty">×'+qty+'</span><button onclick="removeOne(\''+safe+'\')">Remove</button></div>';
+    return '<div class="cart-row"><div class="cart-images">'+imgs+'</div><div class="cart-info"><span class="cart-name">'+name+'</span><div class="cart-controls"><span class="qty">×'+qty+'</span><button class="cart-remove" onclick="removeOne(\''+safe+'\')">Remove</button></div></div></div>';
   }).join("");
 }
 function renderCart(){
